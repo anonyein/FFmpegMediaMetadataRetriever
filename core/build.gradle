@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply from: "$rootProject.projectDir/publishing.gradle"
 
 android {
+    namespace 'wseemann.media'
     compileSdk versions.get("compileSdkVersion")
 
     defaultConfig {
@@ -11,7 +12,11 @@ android {
         versionName versions.get("versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildTypes {
@@ -21,7 +26,9 @@ android {
     }
 
     publishing {
-        singleVariant('release')
+        singleVariant('release') {
+            withSourcesJar()
+        }
     }
 }
 

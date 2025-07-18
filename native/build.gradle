@@ -8,6 +8,7 @@ def pomName = ''
 def pomArtifactId = ""
 
 android {
+    namespace 'wseemann.media'
     buildFeatures {
         buildConfig = false
     }
@@ -50,6 +51,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -61,7 +67,9 @@ android {
     }
 
     publishing {
-        singleVariant('release')
+        singleVariant('release') {
+            withSourcesJar()
+        }
     }
 
     sourceSets.main {
