@@ -33,6 +33,7 @@ const int TARGET_IMAGE_FORMAT = AV_PIX_FMT_RGBA; //AV_PIX_FMT_RGB24;
 const int TARGET_IMAGE_CODEC = AV_CODEC_ID_PNG;
 
 void convert_image(State *state, AVCodecContext *pCodecCtx, AVFrame *pFrame, AVPacket *avpkt, int *got_packet_ptr, int width, int height);
+int advance_file_descriptor(int fd, int64_t offset);
 
 int is_supported_format(int codec_id, int pix_fmt) {
 	if ((codec_id == AV_CODEC_ID_PNG ||
