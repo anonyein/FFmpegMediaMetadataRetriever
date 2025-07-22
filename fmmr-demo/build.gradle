@@ -13,6 +13,11 @@ android {
         targetSdkVersion versions.get("targetSdkVersion")
         versionCode 42
         versionName "1.0.12"
+        ndkVersion versions.get("ndkVersion")
+        
+        ndk {
+            abiFilters 'armeabi-v7a', 'x86', 'x86_64', 'arm64-v8a'
+        }
     }
 
     compileOptions {
