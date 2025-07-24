@@ -21,6 +21,10 @@ export OUTPUT_DIR=${BASE_DIR}/output
 # Check the host machine for proper setup and fail fast otherwise
 ${SCRIPTS_DIR}/check-host-machine.sh || exit 1
 
+echo basedir is ${BASE_DIR}
+echo build dir $BUILD_DIR
+
+
 # Directory to use as a place to build/install FFmpeg and its dependencies
 BUILD_DIR=${BASE_DIR}/build
 # Separate directory to build FFmpeg to

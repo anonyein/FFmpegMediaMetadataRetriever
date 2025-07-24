@@ -43,6 +43,8 @@ build_target() {
     -D__ANDROID_API__=$MIN_SDK_VERSION \
      --prefix=$PWD/build/$ANDROID_ARCH
 
+     export LDFLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
+
     make clean
     #  make SHLIB_VERSION_NUMBER= SHLIB_EXT=.so install_sw
     make install_sw

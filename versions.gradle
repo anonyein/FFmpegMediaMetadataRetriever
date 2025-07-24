@@ -4,5 +4,5 @@ versions.compileSdkVersion = 35
 versions.targetSdkVersion = 35
 versions.versionCode = 21
 versions.versionName = "1.0.19"
-versions.ndkVersion = "29.0.13599879"
+versions.ndkVersion = "21.0.0"
 ext.versions = versions
