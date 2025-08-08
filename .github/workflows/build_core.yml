@@ -1,7 +1,7 @@
-name: FFmpegMediaMetadataRetriever_build_core
+name: build_core
 
 concurrency:
-  group: FFmpegMediaMetadataRetriever_build_${{ github.ref }}
+  group: build_${{ github.ref }}
   cancel-in-progress: true
   
 on:
