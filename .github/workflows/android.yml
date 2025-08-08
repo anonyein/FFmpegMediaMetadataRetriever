@@ -31,10 +31,10 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew :core:build
-
+      run: ./gradlew :core:build |
+           ./gradlew :core:properties | grep buildDir
     - name: Upload the Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build-lib
-        path: core/build/libs
+        path: core/build/
