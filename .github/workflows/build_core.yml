@@ -1,4 +1,4 @@
-name: FFmpegMediaMetadataRetriever_build
+name: FFmpegMediaMetadataRetriever_build_core
 
 concurrency:
   group: FFmpegMediaMetadataRetriever_build_${{ github.ref }}
