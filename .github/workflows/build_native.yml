@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,28 +20,40 @@ jobs:
         distribution: corretto
         java-version: 17
         
-    - name: Setup Android NDK
-      id: setup-ndk
-      uses: nttld/setup-ndk@v1
+    # 添加 Android SDK 安装
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
       with:
-        ndk-version: r28c
-        local-cache: false
-    
+        ndk-version: "28.2.13676358"  # 精确匹配您的 NDK 版本
+
+    # 使用精确的 NDK 路径
     - name: Create local.properties
       run: |
-        echo "sdk.dir=$ANDROID_HOME" >> local.properties
-        echo "ndk.dir=$ANDROID_HOME/ndk/$(ls $ANDROID_HOME/ndk | sort -V | tail -1)" >> local.properties
-        # echo "ndk_build.dir=/usr/local/lib/android/sdk/ndk/21.0.0" >> local.properties
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "ndk.dir=$ANDROID_HOME/ndk/28.2.13676358" >> local.properties
+        echo "ndk_build.dir=$ANDROID_HOME/ndk/21.0.0" >> local.properties
         cat local.properties
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
+    # 添加 --info 获取详细日志
     - name: Build with Gradle
       run: |
-        ./gradlew :native:build
-        ./gradlew :native:properties | grep buildDir
-    - name: Upload the Artifact
+        ./gradlew :native:clean :native:build --info
+        # 验证 AAR 文件是否存在
+        ls -lh native/build/outputs/aar
+        
+    # 精确上传 AAR 文件
+    - name: Upload AAR Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: build-native-lib
-        path: native/build
+        name: native-aar
+        path: native/build/outputs/aar/*.aar
+        
+    # 可选：上传 jniLibs
+    - name: Upload jniLibs
+      uses: actions/upload-artifact@v4
+      with:
+        name: jni-libs
+        path: native/src/main/jniLibs
