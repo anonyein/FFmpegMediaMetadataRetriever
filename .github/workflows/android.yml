@@ -36,5 +36,5 @@ jobs:
     - name: Upload the Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.PACKAGE_NAME }}-release-lib
-        path: ${{ env.BASE_PATH }}/**/release
+        name: build-lib
+        path: core/build/libs
