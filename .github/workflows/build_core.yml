@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,21 +20,47 @@ jobs:
         distribution: corretto
         java-version: 17
         
-    - name: Setup Android NDK
-      id: setup-ndk
-      uses: nttld/setup-ndk@v1
+    # 1. 添加完整的 Android SDK 安装（不仅仅是 NDK）
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
       with:
-        ndk-version: r27c
-        local-cache: false
-
+        ndk-version: "28.2.13676358"  # 使用实际需要的版本号
+    
+    # 2. 创建必要的 local.properties 文件
+    - name: Create local.properties
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "ndk.dir=$ANDROID_HOME/ndk/28.2.13676358" >> local.properties
+        echo "ndk_build.dir=$ANDROID_HOME/ndk/21.0.0" >> local.properties
+        cat local.properties
+        
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
+    # 3. 添加缓存优化加速构建
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    # 4. 修正构建命令
     - name: Build with Gradle
       run: |
-        ./gradlew :core:build
-        ./gradlew :core:properties | grep buildDir
+        # 清理并构建 core 模块
+        ./gradlew :core:clean :core:build
+        
+        # 验证 AAR 文件是否存在
+        echo "检查构建产物:"
+        ls -lh core/build/outputs/aar
+        
+    # 5. 精确上传构建产物（AAR 文件）
     - name: Upload the Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: build-core-lib
-        path: core/build/
+        name: core-aar
+        path: core/build/outputs/aar/*.aar
